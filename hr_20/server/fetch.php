@@ -15,14 +15,21 @@
 
         $fetch_query =  mysqli_query($con,"select * from users");
         $query_rows = mysqli_num_rows($fetch_query);
+        
 
         if($query_rows > 0){
-            while($row = mysqli_fetch_array($fetch_query)){
-                echo $row['name']."<br>";
+            echo "<table class='table table-bordered'><tr><th>Name</th><th>Mobile</th><th>Email</th></tr>";
+            while($row = mysqli_fetch_array($fetch_query)){ 
+                echo "<tr><td>".$row['name']."</td>";
+                echo "<td>".$row['mobile']."</td>";
+                echo "<td>".$row['email']."</td></tr>";
             }
+            echo "</table>";
+            
         }else{
             echo "No Data found";
         }
+
     ?>
 </body>
 </html>
