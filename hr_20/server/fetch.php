@@ -18,11 +18,12 @@
         
 
         if($query_rows > 0){
-            echo "<table class='table table-bordered'><tr><th>Name</th><th>Mobile</th><th>Email</th></tr>";
+            echo "<table class='table table-bordered'><tr><th>Name</th><th>Mobile</th><th>Email</th><th></th></tr>";
             while($row = mysqli_fetch_array($fetch_query)){ 
                 echo "<tr><td>".$row['name']."</td>";
                 echo "<td>".$row['mobile']."</td>";
-                echo "<td>".$row['email']."</td></tr>";
+                echo "<td>".$row['email']."</td>";
+                echo "<td> <a href='./delete.php?id=".$row['id']."'><button class='btn btn-danger'>Delete</button></td></tr></a>";
             }
             echo "</table>";
             
