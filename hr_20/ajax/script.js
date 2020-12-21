@@ -1,17 +1,35 @@
 $(document).ready(function(){
-    $(".myform").submit(function(e){
+    $(document).on('submit','.myform',function(e){
         e.preventDefault();
+        
+        insert_form_data("insert_data");
+
+    });
+    $(document).on("submit",".updateForm",function(e){
+        e.preventDefault();
+        console.log("update_form");
+        insert_form_data("update_data",current_selected_user);
+
+    });
+
+    function insert_form_data(type,id){
         var email  = $("#email").val();
         var mobile  = $("#mobile").val();
         var pass  = $("#pwd").val();
         var name  = $("#name").val();
-
+        var user_id = "";
+        if(id == "" || id == null){
+            user_id = "NAN";
+        }else{
+            user_id = id;
+        }
         var user_data = {
             "name":name,
             "email":email,
             "mobile":mobile,
             "password":pass,
-            "type":"insert_data"
+            "type":type,
+            "id":user_id
         }
 
         $.ajax({
@@ -24,12 +42,14 @@ $(document).ready(function(){
                 show_notification_fun("Data Inserted succesfully");
                 $(".myform")[0].reset();
                }
+               if(val == "Data updated"){
+                    show_notification_fun("Data Updated succesfully");
+                    $(".updateForm")[0].reset();
+               }
                load_Server_Data();
            }
         })
-
-
-    });
+    }
 
     function load_Server_Data(){
         $.ajax({
@@ -48,7 +68,7 @@ $(document).ready(function(){
                     <td>`+e.name+` </td>
                     <td>`+e.mobile+`</td>
                     <td>`+e.email+`</td>
-                    <td><button class="btn btn-danger delete_btn" data-btnid=`+e.id+` title="Delete record"><i class="fa fa-trash"></i> </button> <button class="btn btn-primary" title="edit record"><i class="fa fa-pencil"></i></button></td>
+                    <td><button class="btn btn-danger delete_btn" data-btnid=`+e.id+` title="Delete record"><i class="fa fa-trash"></i> </button> <button class="btn btn-primary data_edit" data-btnid=`+e.id+` title="edit record"><i class="fa fa-pencil"></i></button></td>
                   </tr>`;
                 });
                 $(".my_ser_data").html(html);
@@ -84,7 +104,34 @@ $(document).ready(function(){
                 }
             }
         })
-    })
+    });
+
+    $(document).on('click','.data_edit',function(){
+        var up_id = $(this).attr("data-btnid");
+        window.current_selected_user = up_id;
+        $.ajax({
+            method:'POST',
+            url:"server.php",
+            data:{
+                'type':"get_up_det",
+                'up_id':up_id
+            },
+            success:function(res){
+                console.log(res);
+                var data = JSON.parse(res);
+                data = data.mydata;
+                data.map(function(e){
+                    console.log(e);
+                    $("#email").val(e.email);
+                    $("#name").val(e.name);
+                    $("#mobile").val(e.mobile);
+                    $("#pwd").val(e.password);
+                    $(".dbform").removeClass('myform').addClass('updateForm');
+                })
+            }
+        })
+    });
+
     
     // $(".delete_btn").click(function(){
     //         alert($(this).attr("data-btnid"));
