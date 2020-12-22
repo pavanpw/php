@@ -136,4 +136,62 @@ $(document).ready(function(){
     // $(".delete_btn").click(function(){
     //         alert($(this).attr("data-btnid"));
     // });
+
+    $(".reg_form").submit(function(e){
+        e.preventDefault();
+        var email = $("#email").val();
+        var pass = $("#pwd").val();
+        $.ajax({
+            url:"auth.php",
+            method:"POST",
+            data:{
+                "email":email,
+                "password":pass,
+                "type":"Auth_reg"
+            },
+            success:function(e){
+                if(e == "0"){
+                    show_notification_fun("Already a users please login now.");
+                }else if(e == "1"){
+                    show_notification_fun("Regitration success Login Now..");
+                }else if(e == "00"){
+                    show_notification_fun("Server error");
+                }else{
+                    show_notification_fun("Internal server error");
+                }
+            }
+        })
+    });
+
+
+    $(".login_form").submit(function(e){
+        e.preventDefault();
+        var email = $("#lemail").val();
+        var pass = $("#lpwd").val();
+        $.ajax({
+            url:"auth.php",
+            method:"POST",
+            data:{
+                "email":email,
+                "password":pass,
+                "type":"Auth_login"
+            },
+            success:function(e){
+                console.log(e);
+                if(e == "1"){
+                    show_notification_fun("Login success");
+                    setTimeout(() => {
+                        window.location = "index.php";
+                    }, 2000);
+
+                }else if(e == "00"){
+                    show_notification_fun("Password missmatch");
+                }else if(e == "0"){
+                    show_notification_fun("email not found please register an account");
+                }else{
+                    show_notification_fun("Internal sever error");
+                }
+            }
+        })
+    });
 });

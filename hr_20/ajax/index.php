@@ -1,3 +1,5 @@
+<?php include_once('session_check.php'); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +15,11 @@
 <body>
 
 <div class="container">
+  <div>
+    <a href="logout.php">
+      <button class="btn btn-danger">Logout</button>
+    </a>
+  </div>
   <h2>Horizontal form</h2>
   <form class="myform dbform form-horizontal">
     <div class="form-group">
